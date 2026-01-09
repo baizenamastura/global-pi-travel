@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Restored original meta tag verification key -->
+    <meta name="pi-network-domain-verification" content="uuq9i8etavautqk0bedtiqfssb3jqlbvkpviodhxuyg8gnqefiluuoy33p9wvuba">
+    <title>Global Pi Travel - Explore, Book & Pay with Pi Worldwide</title>
+    <meta name="description" content="Your global travel companion powered by Pi Network. Search, explore, book and pay with Pi worldwide.">
+    
+    <script src="https://sdk.minepi.com/pi-sdk.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #667eea;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .pi-symbol {
+            font-size: 36px;
+            color: #764ba2;
+        }
+        
+        .login-btn {
+            background: #667eea;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .login-btn:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        
+        .hero {
+            text-align: center;
+            padding: 60px 20px;
+            color: white;
+        }
+        
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .hero p {
+            font-size: 20px;
+            margin-bottom: 30px;
+            opacity: 0.95;
+        }
+        
+        .search-section {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            max-width: 800px;
+            margin: 0 auto 40px;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 16px;
+            font-size: 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .search-btn {
+            width: 100%;
+            background: #667eea;
+            color: white;
+            padding: 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .search-btn:hover {
+            background: #764ba2;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin: 40px 0;
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+        }
+        
+        .feature-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+        
+        .feature-card h3 {
+            color: #667eea;
+            margin-bottom: 12px;
+            font-size: 22px;
+        }
+        
+        .feature-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .cta-section {
+            background: white;
+            padding: 60px 20px;
+            text-align: center;
+            border-radius: 16px;
+            margin: 40px 0;
+        }
+        
+        .cta-section h2 {
+            color: #667eea;
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+        
+        .cta-section p {
+            color: #666;
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+        
+        .cta-btn {
+            background: #764ba2;
+            color: white;
+            padding: 18px 40px;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .cta-btn:hover {
+            background: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(118, 75, 162, 0.4);
+        }
+        
+        footer {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px 20px;
+            text-align: center;
+            margin-top: 60px;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        
+        .footer-links a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: #764ba2;
+        }
+        
+        .copyright {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 32px;
+            }
+            
+            .hero p {
+                font-size: 16px;
+            }
+            
+            .features {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <span class="pi-symbol">π</span>
+                <span>Global Pi Travel</span>
+            </div>
+            <button class="login-btn" onclick="loginWithPi()">Login with Pi</button>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h1>Welcome to Global Pi Travel</h1>
+                <p>Your Global Travel Companion Powered by Pi Network</p>
+                <p>Search, Explore, Book & Pay with Pi Worldwide</p>
+            </div>
+        </section>
+
+        <div class="container">
+            <section class="search-section">
+                <h2 style="color: #667eea; margin-bottom: 20px;">Find Your Next Adventure</h2>
+                <input type="text" class="search-input" placeholder="Search destinations, hotels, activities..." id="searchInput">
+                <button class="search-btn" onclick="searchDestination()">Search Destinations</button>
+            </section>
+
+            <section class="features">
+                <div class="feature-card">
+                    <div class="feature-icon">🌍</div>
+                    <h3>Global Reach</h3>
+                    <p>Discover destinations worldwide with our extensive network of Pi-accepting merchants</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">💎</div>
+                    <h3>Pay with Pi</h3>
+                    <p>Use your Pi cryptocurrency for seamless bookings and payments everywhere</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🏨</div>
+                    <h3>Verified Merchants</h3>
+                    <p>Book with confidence from our curated list of verified travel service providers</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Best Deals</h3>
+                    <p>Access exclusive Pi-only discounts and special offers from our partners</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Secure Booking</h3>
+                    <p>Your transactions are protected by Pi Network's blockchain technology</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>Easy to Use</h3>
+                    <p>Simple, intuitive interface designed for travelers on the go</p>
+                </div>
+            </section>
+
+            <section class="cta-section">
+                <h2>Are You a Travel Merchant?</h2>
+                <p>Join our global directory and connect with Pi travelers worldwide</p>
+                <button class="cta-btn" onclick="registerMerchant()">Register Your Business</button>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-links">
+            <a href="#about">About Us</a>
+            <a href="#privacy">Privacy Policy</a>
+            <a href="#terms">Terms of Service</a>
+            <a href="#disclaimer">Disclaimer</a>
+            <a href="#contact">Contact Us</a>
+        </div>
+        <div class="copyright">
+            © 2025 Global Pi Travel. All rights reserved. | Powered by Pi Network
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Pi SDK
+        const Pi = window.Pi;
+        
+        async function loginWithPi() {
+            try {
+                if (!Pi) {
+                    alert('Pi SDK not loaded. Please ensure you are accessing from Pi Browser or have Pi SDK installed.');
+                    return;
+                }
+                
+                const scopes = ['username', 'payments'];
+                const authResult = await Pi.authenticate(scopes, onIncompletePaymentFound);
+                
+                console.log('Pi authentication successful:', authResult);
+                alert('Welcome, ' + authResult.user.username + '! You are now logged in with Pi.');
+                
+                // Here you would typically send the authResult to your backend
+                // and create a user session
+                
+            } catch (error) {
+                console.error('Pi authentication error:', error);
+                alert('Login failed. Please try again.');
+            }
+        }
+        
+        function onIncompletePaymentFound(payment) {
+            console.log('Incomplete payment found:', payment);
+            // Handle incomplete payment
+        }
+        
+        function searchDestination() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                alert('Searching for: ' + searchTerm + '\n\nThis feature will be available soon!');
+                // Here you would typically redirect to search results page
+                // window.location.href = '/search?q=' + encodeURIComponent(searchTerm);
+            } else {
+                alert('Please enter a destination to search');
+            }
+        }
+        
+        function registerMerchant() {
+            alert('Merchant Registration\n\nThank you for your interest! Please use the Pi Browser app to complete merchant registration.');
+            // Here you would typically redirect to merchant registration page
+            // window.location.href = '/merchant-register';
+        }
+    </script>
+</body>
+</html>
