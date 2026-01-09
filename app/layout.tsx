@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     title: "Global Pi Travel - Pay with Pi Worldwide",
     description:
       "Explore the world and pay with Pi cryptocurrency. Connect with travelers and merchants accepting Pi payments globally.",
-    url: "https://globalpitravel3684.pinet.com",
+    url: "https://global-pi-travel.vercel.app",
     siteName: "Global Pi Travel",
     locale: "en_US",
     type: "website",
@@ -86,7 +86,7 @@ export default function RootLayout({
             __html: `
               window.piConfig = {
                 apiKey: 'pyrd9grcke0xc1umvdzzt8lgyrbcnozdy6upuvf649iqrwpl5ueueuwtenyez5wo',
-                domain: 'https://globalpitravel3684.pinet.com',
+                domain: 'https://global-pi-travel.vercel.app'
                 sandboxMode: true
               };
               
