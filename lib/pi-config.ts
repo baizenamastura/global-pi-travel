@@ -1,6 +1,6 @@
 export const piConfig = {
   apiKey: process.env.NEXT_PUBLIC_PI_API_KEY || "pyrd9grcke0xc1umvdzzt8lgyrbcnozdy6upuvf649iqrwpl5ueueuwtenyez5wo",
-  domain: process.env.NEXT_PUBLIC_PI_DOMAIN || "https://globalpitravel3684.pinet.com",
+  domain: process.env.NEXT_PUBLIC_PI_DOMAIN || "https://global-pi-travel.vercel.app",
   sandboxMode: true, // Set to true for testing, false for production
   // App wallet for SDK payments
   appWalletAddress: "GDEZMXC4H2RTFJTKBJ4JSYL2LCQAQW5F4GO5F34PPOPFAN5EOP34BAR6",
