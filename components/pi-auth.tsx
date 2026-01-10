@@ -20,7 +20,7 @@ interface PiAuthProps {
   onIncompletePaymentFound?: (payment: any) => void
 }
 
-const ADMIN_USERNAME = "GlobalTravelPiAdmin" // Updated admin username for new app
+const ADMIN_USERNAME = "GlobalTravelPiAdmin" //"zenamastura"
 
 export function PiAuth({ onLogin, onBack, onIncompletePaymentFound }: PiAuthProps) {
   const [isAuthenticating, setIsAuthenticating] = useState(false)
