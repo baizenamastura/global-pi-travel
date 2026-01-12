@@ -14,8 +14,6 @@ import { UserDashboard } from "@/components/user-dashboard"
 import { AdminDashboard } from "@/components/admin-dashboard"
 import { Footer } from "@/components/footer"
 import { CustomerServiceBot } from "@/components/customer-service-bot"
-import { LoadingSpinner } from "@/components/loading-spinner"
-import { analytics } from "@/lib/analytics"
 import { HelpCircle } from "lucide-react"
 import {
   Plane,
@@ -66,14 +64,6 @@ export default function HomePage() {
   const [showCustomerBot, setShowCustomerBot] = useState(false)
 
   useEffect(() => {
-    analytics.trackPageView("home")
-  }, [])
-
-  useEffect(() => {
-    analytics.trackPageView(activeView)
-  }, [activeView])
-
-  useEffect(() => {
     try {
       const stored = localStorage.getItem("piUser")
       if (stored) {
@@ -83,7 +73,6 @@ export default function HomePage() {
       }
     } catch (error) {
       console.error("[v0] Error loading user data:", error)
-      analytics.trackEvent("error", "user_data_load", error instanceof Error ? error.message : "Unknown error")
     } finally {
       setIsLoading(false)
     }
@@ -97,7 +86,6 @@ export default function HomePage() {
       }
     } catch (error) {
       console.error("[v0] Error loading transactions:", error)
-      analytics.trackEvent("error", "transactions_load", error instanceof Error ? error.message : "Unknown error")
     }
   }
 
@@ -105,15 +93,12 @@ export default function HomePage() {
     setPiUser(user)
     loadUserTransactions(user.uid)
     setActiveView("home")
-    analytics.trackUserRegistration(user.username)
-    analytics.trackEvent("login", "authentication", "pi_network")
   }
 
   const handleLogout = () => {
     setPiUser(null)
     setUnlockedMerchants([])
     setActiveView("home")
-    analytics.trackEvent("logout", "authentication", "user_logout")
   }
 
   const handleUnlockSuccess = (merchantId: number, merchantName: string) => {
@@ -129,15 +114,14 @@ export default function HomePage() {
     const updated = [...unlockedMerchants, newTransaction]
     setUnlockedMerchants(updated)
     localStorage.setItem(`transactions_${piUser.uid}`, JSON.stringify(updated))
-    analytics.trackPiPayment("0.00000955", merchantName, merchantId)
   }
 
   if (isLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center space-y-4">
-          <h1 className="text-2xl md:text-3xl font-bold text-primary mb-4">GLOBAL Pi TRAVEL</h1>
-          <LoadingSpinner message="Preparing your travel companion..." size="lg" />
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-primary mb-2">GLOBAL Pi TRAVEL</h1>
+          <p className="text-sm text-foreground">Loading...</p>
         </div>
       </div>
     )
@@ -204,10 +188,7 @@ export default function HomePage() {
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => {
-                      setActiveView("dashboard")
-                      analytics.trackEvent("navigation", "dashboard", "user_profile")
-                    }}
+                    onClick={() => setActiveView("dashboard")}
                     className="border-primary text-primary hover:bg-primary hover:text-white text-sm"
                   >
                     <User className="mr-2 h-4 w-4" />
@@ -222,10 +203,7 @@ export default function HomePage() {
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => {
-                    setActiveView("login")
-                    analytics.trackEvent("click", "login_button", "header")
-                  }}
+                  onClick={() => setActiveView("login")}
                   className="border-primary text-primary hover:bg-primary hover:text-white text-sm"
                 >
                   <LogIn className="mr-2 h-4 w-4" />
@@ -255,10 +233,7 @@ export default function HomePage() {
           <div className="flex justify-center mb-6">
             <Button
               size="lg"
-              onClick={() => {
-                setActiveView("search")
-                analytics.trackEvent("click", "start_now", "hero_section")
-              }}
+              onClick={() => setActiveView("search")}
               className="bg-primary hover:bg-primary/90 text-white font-semibold text-base px-6 py-5"
             >
               Start Now
@@ -295,10 +270,7 @@ export default function HomePage() {
           {/* Search Destinations Card */}
           <Card
             className="cursor-pointer hover:shadow-lg transition-shadow border-2 border-primary/20"
-            onClick={() => {
-              setActiveView("search")
-              analytics.trackEvent("click", "feature_card", "search_destinations")
-            }}
+            onClick={() => setActiveView("search")}
           >
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center gap-2 text-base">
@@ -335,10 +307,7 @@ export default function HomePage() {
           <Card
             className="cursor-pointer hover:shadow-lg transition-shadow border-[6px]"
             style={{ borderColor: "rgb(21, 128, 61)" }}
-            onClick={() => {
-              setActiveView("globalListing")
-              analytics.trackEvent("click", "feature_card", "global_directory")
-            }}
+            onClick={() => setActiveView("globalListing")}
           >
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center gap-2 text-base font-bold" style={{ color: "rgb(21, 128, 61)" }}>
@@ -358,10 +327,7 @@ export default function HomePage() {
           <Card
             className="cursor-pointer hover:shadow-lg transition-shadow border-[6px]"
             style={{ borderColor: "rgb(20, 184, 166)" }}
-            onClick={() => {
-              setActiveView("register")
-              analytics.trackEvent("click", "feature_card", "subscription_plans")
-            }}
+            onClick={() => setActiveView("register")}
           >
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center gap-2 text-base">
@@ -379,10 +345,7 @@ export default function HomePage() {
           <Card
             className="cursor-pointer hover:shadow-lg transition-shadow border-[6px]"
             style={{ borderColor: "rgb(0, 153, 255)" }}
-            onClick={() => {
-              setActiveView("merchants")
-              analytics.trackEvent("click", "feature_card", "pi_merchants")
-            }}
+            onClick={() => setActiveView("merchants")}
           >
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center gap-2 text-base">
@@ -402,10 +365,7 @@ export default function HomePage() {
           <Card
             className="cursor-pointer hover:shadow-lg transition-shadow border-[6px]"
             style={{ borderColor: "rgb(147, 51, 234)" }}
-            onClick={() => {
-              setActiveView("forum")
-              analytics.trackEvent("click", "feature_card", "community_forum")
-            }}
+            onClick={() => setActiveView("forum")}
           >
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center gap-2 text-base" style={{ color: "rgb(147, 51, 234)" }}>
@@ -427,10 +387,7 @@ export default function HomePage() {
               backgroundColor: "rgb(21, 128, 61)",
               maxWidth: "100%",
             }}
-            onClick={() => {
-              setActiveView("submit")
-              analytics.trackEvent("click", "feature_card", "submit_business")
-            }}
+            onClick={() => setActiveView("submit")}
           >
             <CardHeader className="pb-2 px-3">
               <CardTitle className="flex items-center gap-2 text-sm text-white font-bold">
@@ -467,10 +424,7 @@ export default function HomePage() {
       {/* Floating Customer Service Bot Button */}
       {!showCustomerBot && (
         <button
-          onClick={() => {
-            setShowCustomerBot(true)
-            analytics.trackEvent("click", "customer_service", "help_button")
-          }}
+          onClick={() => setShowCustomerBot(true)}
           className="fixed bottom-6 right-6 z-40 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-full p-4 shadow-lg hover:shadow-xl transition-all hover:scale-110 flex items-center gap-2"
           aria-label="Open customer support chat"
         >
@@ -487,3 +441,73 @@ export default function HomePage() {
     </div>
   )
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
