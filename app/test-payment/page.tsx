@@ -22,15 +22,10 @@ export default function TestPaymentPage() {
 
       const Pi = (window as any).Pi
 
-      // Initialize Pi SDK
+      // Initialize Pi SDK with payment scope
       await Pi.init({ version: "2.0", sandbox: true })
-      
-      // Request payment scope permission
-      await Pi.authenticate([{ scopes: ["payments"] }], (auth: any) => {
-        console.log("[v0] Auth successful:", auth)
-      })
 
-      // Create payment
+      // Create payment (Pi SDK automatically handles payment permissions)
       const payment = await Pi.createPayment(
         {
           amount: 0.0001,
