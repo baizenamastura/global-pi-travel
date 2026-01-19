@@ -14,8 +14,9 @@ export function initializePiSdk() {
       ;(window as any).Pi.init({
         version: "2.0",
         sandbox: true,
+        scopes: ["payments", "username"],
       })
-      console.log("[v0] Pi SDK initialized with sandbox mode: true")
+      console.log("[v0] Pi SDK initialized with payment scope enabled")
     } catch (error) {
       console.error("[v0] Failed to initialize Pi SDK:", error)
     }
