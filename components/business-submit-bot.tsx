@@ -202,14 +202,8 @@ export function BusinessSubmitBot({ onBack }: BusinessSubmitBotProps) {
         setStep(8)
       } else if (step === 8) {
         setBusinessData({ ...businessData, rating: input })
-        const tier = businessData.tier
-        const isBigOrEnterprise = tier.tier === "Big Merchant" || tier.tier === "Large Enterprise"
-        const featuredText = isBigOrEnterprise
-          ? `\n\n✨ PREMIUM OPTION: Add $30/monthly to be featured in top search results (3x more visibility!)\nWould you like to add Featured Listing? Type 'Yes' or 'No'`
-          : ""
-
-        botResponse = `Excellent! Here's your business summary:\n\n📋 Business: ${businessData.name}\n📍 Location: ${businessData.location}\n📂 Category: ${businessData.category}\n⭐ Rating: ${input}\n\nYour merchant tier: ${tier.tier}\n💰 Monthly Fee: $${tier.monthly.usd} USD (${tier.monthly.pi} Pi)\n💰 Yearly Fee: $${tier.yearly.usd} USD (${tier.yearly.pi} Pi) - ${tier.yearly.discount}${featuredText}\n\n${isBigOrEnterprise ? "First, answer about Featured Listing, then " : ""}Would you prefer:\n1. Auto-renew my listing (automatic renewal)\n2. Remind me manually each cycle\n\nPlease type 1 or 2:`
-        setStep(9)
+        botResponse = `🎉 Congratulations! Your application for FREE business listing in Global Pi Travel directory was successful!\n\n📋 Business Summary:\n🏢 Business: ${businessData.name}\n📍 Location: ${businessData.location}\n📂 Category: ${businessData.category}\n📞 Phone: ${businessData.phone}\n📧 Email: ${businessData.email}\n💬 WhatsApp: ${businessData.whatsapp}\n⭐ Rating: ${input}\n\n✅ Your business is now listed in our global directory!\n✅ Visible to millions of Pi Pioneers worldwide\n✅ Ready to accept Pi cryptocurrency payments\n\nThank you for joining the Pi Network travel revolution! 🌍✈️\n\nYou can upgrade to premium features anytime to get:\n• Featured placement in search results\n• Priority customer support\n• Advanced analytics dashboard\n• Special promotional opportunities\n\nWelcome to Global Pi Travel! 🎊`
+        setStep(999) // End conversation
       } else if (step === 9) {
         const tier = businessData.tier
         const isBigOrEnterprise = tier.tier === "Big Merchant" || tier.tier === "Large Enterprise"
