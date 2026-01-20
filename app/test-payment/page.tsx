@@ -3,29 +3,58 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { ArrowLeft, CheckCircle } from "lucide-react"
+import { ArrowLeft, CheckCircle, Shield } from "lucide-react"
 import { useRouter } from "next/navigation"
 
 export default function TestPaymentPage() {
   const router = useRouter()
+  const [step, setStep] = useState<"authorize" | "payment">("authorize")
+  const [isAuthorized, setIsAuthorized] = useState(false)
   const [paymentStatus, setPaymentStatus] = useState<"idle" | "processing" | "success" | "error">("idle")
   const [errorMessage, setErrorMessage] = useState("")
 
-  const handlePiPayment = async () => {
+  // STEP 1: Request payment scope authorization
+  const handleRequestPaymentScope = async () => {
     setPaymentStatus("processing")
 
     try {
-      // Check if Pi SDK is available
       if (typeof window === "undefined" || !(window as any).Pi) {
         throw new Error("Pi SDK not available. Please open this in Pi Browser.")
       }
 
       const Pi = (window as any).Pi
-
-      // Initialize Pi SDK with payment scope
       await Pi.init({ version: "2.0", sandbox: true })
 
-      // Create payment (Pi SDK automatically handles payment permissions)
+      // Request payment scope - this will show "Allow payments?" popup
+      const scopes = ["username", "payments"]
+      const auth = await Pi.authenticate(scopes, (payment: any) => {
+        console.log("[v0] Incomplete payment found:", payment)
+      })
+
+      console.log("[v0] Payment scope authorized:", auth)
+      setIsAuthorized(true)
+      setStep("payment")
+      setPaymentStatus("idle")
+    } catch (error) {
+      console.error("[v0] Authorization failed:", error)
+      setErrorMessage(error instanceof Error ? error.message : "Authorization failed")
+      setPaymentStatus("error")
+    }
+  }
+
+  // STEP 2: Create payment (only after authorization)
+  const handleCreatePayment = async () => {
+    if (!isAuthorized) {
+      setErrorMessage("Please authorize payment scope first")
+      return
+    }
+
+    setPaymentStatus("processing")
+
+    try {
+      const Pi = (window as any).Pi
+
+      // Create payment - this will show "Pay X Pi?" popup
       const payment = await Pi.createPayment(
         {
           amount: 0.0001,
@@ -58,6 +87,8 @@ export default function TestPaymentPage() {
     }
   }
 
+  const handlePiPayment = handleRequestPaymentScope; // Declare handlePiPayment variable
+
   return (
     <div className="min-h-screen bg-background p-4">
       <div className="container mx-auto max-w-2xl py-8">
@@ -87,14 +118,46 @@ export default function TestPaymentPage() {
               </div>
             </div>
 
-            {paymentStatus === "idle" && (
-              <Button
-                onClick={handlePiPayment}
-                className="w-full h-16 text-lg font-semibold"
-                style={{ backgroundColor: "rgb(20, 83, 45)", color: "white" }}
-              >
-                Pay 0.0001 Pi via Pi SDK
-              </Button>
+            {step === "authorize" && (
+              <div className="space-y-4">
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <div className="flex items-start gap-3">
+                    <Shield className="w-6 h-6 text-blue-600 mt-1" />
+                    <div>
+                      <p className="font-semibold text-blue-900">Step 1: Authorize Payment Scope</p>
+                      <p className="text-sm text-blue-700 mt-1">
+                        Pi Browser will ask: "This App wants to process payments - Do you Allow?"
+                      </p>
+                      <p className="text-sm text-blue-700 mt-1">Click "Allow" to grant payment permission.</p>
+                    </div>
+                  </div>
+                </div>
+                <Button
+                  onClick={handleRequestPaymentScope}
+                  disabled={paymentStatus === "processing"}
+                  className="w-full h-16 text-lg font-semibold"
+                  style={{ backgroundColor: "rgb(20, 83, 45)", color: "white" }}
+                >
+                  {paymentStatus === "processing" ? "Requesting Authorization..." : "1. Authorize Payment Access"}
+                </Button>
+              </div>
+            )}
+
+            {step === "payment" && paymentStatus === "idle" && (
+              <div className="space-y-4">
+                <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                  <CheckCircle className="w-6 h-6 text-green-600 mb-2" />
+                  <p className="font-semibold text-green-900">Payment Scope Authorized!</p>
+                  <p className="text-sm text-green-700 mt-1">Now you can proceed with the test payment.</p>
+                </div>
+                <Button
+                  onClick={handleCreatePayment}
+                  className="w-full h-16 text-lg font-semibold"
+                  style={{ backgroundColor: "rgb(20, 83, 45)", color: "white" }}
+                >
+                  2. Pay 0.0001 Pi via Pi SDK
+                </Button>
+              </div>
             )}
 
             {paymentStatus === "processing" && (
