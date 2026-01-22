@@ -448,7 +448,7 @@ export function BusinessSubmitBot({ onBack }: BusinessSubmitBotProps) {
                       }`}
                       style={
                         message.role === "user"
-                          ? { backgroundColor: "rgb(20, 83, 45)", color: "rgb(218, 165, 32)" }
+                          ? { backgroundColor: "rgb(20, 83, 45)", color: "white" }
                           : {}
                       }
                     >
@@ -474,7 +474,7 @@ export function BusinessSubmitBot({ onBack }: BusinessSubmitBotProps) {
                 <Button
                   onClick={handleSend}
                   size="icon"
-                  style={{ backgroundColor: "rgb(20, 83, 45)", color: "rgb(218, 165, 32)" }}
+                  style={{ backgroundColor: "rgb(20, 83, 45)", color: "white" }}
                 >
                   <Send className="h-4 w-4" />
                 </Button>
