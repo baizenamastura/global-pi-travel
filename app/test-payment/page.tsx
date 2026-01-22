@@ -59,28 +59,29 @@ export default function TestPaymentPage() {
       const Pi = (window as any).Pi
 
       // Create payment (payment scope already granted during authentication)
-      const payment = await Pi.createPayment(
+      await Pi.createPayment(
         {
-          amount: 0.0001,
-          memo: "Test transaction for Global Pi Travel",
-          metadata: { test: true },
+          amount: 0.1,
+          memo: "Test payment - Step 10",
+          metadata: { app: "GlobalPiTravel" },
         },
         {
           onReadyForServerApproval: (paymentId: string) => {
-            console.log("[v0] Payment approved by user:", paymentId)
-            setPaymentStatus("success")
+            console.log("[v0] Ready for approval:", paymentId)
           },
           onReadyForServerCompletion: (paymentId: string, txid: string) => {
             console.log("[v0] Payment completed:", paymentId, txid)
+            setPaymentStatus("success")
           },
           onCancel: (paymentId: string) => {
             console.log("[v0] Payment cancelled:", paymentId)
-            setPaymentStatus("idle")
+            setPaymentStatus("error")
+            setErrorMessage("Payment was cancelled")
           },
           onError: (error: Error, payment?: any) => {
-            console.error("[v0] Payment error:", error)
-            setErrorMessage(error.message)
+            console.error("[v0] Payment error:", error, payment)
             setPaymentStatus("error")
+            setErrorMessage("Payment error occurred")
           },
         },
       )
@@ -109,10 +110,10 @@ export default function TestPaymentPage() {
               <h3 className="font-semibold mb-2">Test Transaction Details:</h3>
               <div className="space-y-1 text-sm">
                 <p>
-                  <strong>Amount:</strong> 0.0001 Pi
+                  <strong>Amount:</strong> 0.1 Pi
                 </p>
                 <p>
-                  <strong>Purpose:</strong> App verification test payment
+                  <strong>Purpose:</strong> Step 10 verification payment
                 </p>
                 <p>
                   <strong>Mode:</strong> Sandbox/Testnet
@@ -158,7 +159,7 @@ export default function TestPaymentPage() {
                   className="w-full h-16 text-lg font-semibold"
                   style={{ backgroundColor: "rgb(20, 83, 45)", color: "white" }}
                 >
-                  2. Pay 0.0001 Pi - Test Payment
+                  2. Pay 0.1 Pi - Test Payment
                 </Button>
               </div>
             )}
